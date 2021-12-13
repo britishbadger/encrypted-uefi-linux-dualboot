@@ -13,42 +13,38 @@ This guide will describe how to setup a new disk using LVM encrypted disk. It wa
 [encrypted-name] - e.g. cryptubuntu
 [vgname] - e.g. vgubuntu
 
-After complete, we should have something like the following
 
 ```
-[shrink windows partition] in window
-[create boot partition] in partion editor on live cd#
-[create unallocated partition] in partition editor from live cd
-[create encrypted partition using BASH] 
+[shrink windows partition]
+[create boot partition]
+[create encrypted partition]
 sudo cryptsetup luksFormat /dev/[partition-to-encrypt]
 sudo cryptsetup luksOpen /dev/[partition-encrypted] [encrypted-name]
 ls -la /dev/mapper
 sudo pvcreate /dev/mapper/[encrypted-name]
-sudo vgcreate vgubuntu /dev/mapper/[encrypted-name]
-sudo lvcreate -n lvswap -L 1g vgubuntu
-sudo lvcreate -n lvroot -L 64g vgubuntu
-sudo lvcreate -n lvhome -l 100%FREE vgubuntu
-sudo mkswap /dev/mapper/vgubuntu-lvswap
-sudo mkfs.ext4 /dev/mapper/vgubuntu-lvroot
-sudo tune2fs -l /dev/mapper/vgubuntu-lvroot | grep "Reserved"
-sudo tune2fs -m 1 /dev/mapper/vgubuntu-lvroot
-sudo mkfs.ext4 /dev/mapper/vgubuntu-lvhome
-# Reduce redundant blocks
-sudo tune2fs -m 0.1 /dev/mapper/vgubuntu-lvhome
-
+sudo vgcreate [vgname] /dev/mapper/[encrypted-name]
+sudo lvcreate -n lvswap -L 1g [vgname]
+sudo lvcreate -n lvroot -L 64g [vgname]
+sudo lvcreate -n lvhome -l 100%FREE [vgname]
+sudo mkswap /dev/mapper/[vgname]-lvswap
+sudo mkfs.ext4 /dev/mapper/[vgname]-lvroot
+sudo tune2fs -l /dev/mapper/[vgname]-lvroot | grep "Reserved"
+sudo tune2fs -m 1 /dev/mapper/[vgname]-lvroot
+sudo mkfs.ext4 /dev/mapper/[vgname]-lvhome
+sudo tune2fs -m 0.1 /dev/mapper/[vgname]-lvhome
 sudo lvdisplay
 [install with gui]
 [continue testing]
 sudo blkid
-sudo mount /dev/mapper/vgubuntu-lvroot /mnt
-sudo mount /dev/mapper/vgubuntu-lvhome /mnt/home
+sudo mount /dev/mapper/[vgname]-lvroot /mnt
+sudo mount /dev/mapper/[vgname]-lvhome /mnt/home
 sudo mount /dev/[boot-partition] /mnt/boot
 sudo mount --bind /dev /mnt/dev
 sudo chroot /mnt
 mount -t proc proc /proc
 mount -t sysfs sys /sys
 mount -t devpts devpts /dev/pts
-nano /etc/crypttabXXXXXX-XXXX-XXXXXX-XXXX-XXXXXXXXX
+nano /etc/crypttab
 # [target name] [source device] [key file] [options]
 update-initramfs -k all -c
 # Finish the install
@@ -80,6 +76,8 @@ kdecrypt UUID="XXXXXXX-XXXX-XXXX-XXXXXXX-XXXXXXXXXXX" none luks,discard4cc" none
 ```
 
 ## Resulting output when configured
+
+After complete, we should have something like the following
 
 ```
 lsblk
