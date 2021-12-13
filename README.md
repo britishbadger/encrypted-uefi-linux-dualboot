@@ -96,5 +96,5 @@ nvme0n1            259:0    0 953.9G  0 disk
 ```
 
 # References
-https://www.mikekasberg.com/blog/2020/04/08/dual-boot-ubuntu-and-windows-with-encryption.html
-https://www.youtube.com/watch?v=YU97K8Xavcc
+- https://www.mikekasberg.com/blog/2020/04/08/dual-boot-ubuntu-and-windows-with-encryption.html
+- https://www.youtube.com/watch?v=YU97K8Xavcc
